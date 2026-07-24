@@ -1,22 +1,31 @@
-import cloudinary from "../config/cloudinary.js";
+import { v2 as cloudinary } from "cloudinary";
+import fs from "fs";
 
-const uploadToCloudinary = async (file) => {
-    if (!file) return null;
+const uploadToCloudinary = async (localFilePath) => {
+    try {
+        if (!localFilePath) return null;
 
-    return new Promise((resolve, reject) => {
-        cloudinary.uploader
-            .upload_stream(
-                {
-                    folder: "TeamCache",
-                    resource_type: "auto",
-                },
-                (error, result) => {
-                    if (error) return reject(error);
-                    resolve(result);
-                }
-            )
-            .end(file.buffer);
-    });
+        const response = await cloudinary.uploader.upload(localFilePath, {
+            folder: "TeamCache/images",
+            resource_type: "image",
+        });
+
+        if (fs.existsSync(localFilePath)) {
+            fs.unlinkSync(localFilePath);
+        }
+
+        return {
+            public_id: response.public_id,
+            url: response.secure_url,
+        };
+    } catch (error) {
+        if (localFilePath && fs.existsSync(localFilePath)) {
+            fs.unlinkSync(localFilePath);
+        }
+
+        throw error;
+    }
+    
 };
 
 export default uploadToCloudinary;
