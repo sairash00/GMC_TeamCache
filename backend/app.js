@@ -9,6 +9,7 @@ import errorHandler from "./middlewares/error.middleware.js";
 import authRoutes from "./routes/auth.route.js";
 import userRoutes from "./routes/user.route.js";
 import videoRoutes from "./routes/video.route.js"
+import skillRequestRoutes from "./routes/skillRequest.route.js";
 const app = express();
 
 // middleware configs
@@ -36,7 +37,8 @@ app.get("/", (req, res) => {
 
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
-app.use("/api/video",videoRoutes)
+app.use("/api/video",videoRoutes);
+app.use("/api/skill-request", skillRequestRoutes);
 
 
 // 404 route not found handler || invalid routes

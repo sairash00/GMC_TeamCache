@@ -105,7 +105,7 @@ export const getVideoById = CatchAsync(async (req, res) => {
 });
 
 // Unlock Premium Video
-
+// ditching it for the time being
 export const unlockPremiumVideo = CatchAsync(async (req, res) => {
   const { id } = req.params;
 
