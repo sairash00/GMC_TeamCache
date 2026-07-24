@@ -1,5 +1,5 @@
 import User from "../models/user.model.js";
-import Video from "../models/video.model.js";
+import Video from "../models/video.model.js"; 
 
 import CatchAsync from "../utils/CatchAsync.js";
 import ApiError from "../utils/ApiError.js";
@@ -83,7 +83,7 @@ export const getAllVideos = CatchAsync(async (req, res) => {
     createdAt: -1,
   });
 
-  return sendResponse(res, 200, true, "Videos fetched successfully.", videos);
+  return sendResponse(res, 200, "Videos fetched successfully.", videos);
 });
 
 // Get Video By Id
@@ -101,7 +101,7 @@ export const getVideoById = CatchAsync(async (req, res) => {
 
   await video.save();
 
-  return sendResponse(res, 200, true, "Video fetched successfully.", video);
+  return sendResponse(res, 200,  "Video fetched successfully.", video);
 });
 
 // Unlock Premium Video
@@ -116,7 +116,7 @@ export const unlockPremiumVideo = CatchAsync(async (req, res) => {
   }
 
   if (!video.isPremium) {
-    return sendResponse(res, 200, true, "This video is already free.", video);
+    return sendResponse(res, 200, "This video is already free.", video);
   }
 
   const user = await User.findById(req.user._id);
@@ -129,7 +129,7 @@ export const unlockPremiumVideo = CatchAsync(async (req, res) => {
 
   await user.save();
 
-  return sendResponse(res, 200, true, "Premium video unlocked successfully.", {
+  return sendResponse(res, 200,"Premium video unlocked successfully.", {
     remainingCredits: user.credits,
     video,
   });

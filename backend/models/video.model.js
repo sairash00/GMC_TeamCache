@@ -54,13 +54,6 @@ const videoSchema = new mongoose.Schema(
                 "Other",
             ],
         },
-
-        duration: {
-            type: Number,
-            required: true,
-            min: 1,
-        },
-
         isPremium: {
             type: Boolean,
             default: false,
