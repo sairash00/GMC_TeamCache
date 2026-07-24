@@ -18,10 +18,13 @@ const categories = [
 const UploadVideo = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+
   const [category, setCategory] = useState(categories[0]);
+
   const [isPremium, setIsPremium] = useState(false);
 
   const [thumbnail, setThumbnail] = useState<File | null>(null);
+
   const [video, setVideo] = useState<File | null>(null);
 
   const [loading, setLoading] = useState(false);
@@ -37,6 +40,7 @@ const UploadVideo = () => {
       !video
     ) {
       toast.error("Please fill all the fields.");
+
       return;
     }
 
@@ -46,21 +50,43 @@ const UploadVideo = () => {
       const formData = new FormData();
 
       formData.append("title", title);
+
       formData.append("description", description);
+
       formData.append("category", category);
+
       formData.append("isPremium", String(isPremium));
+
       formData.append("thumbnail", thumbnail);
+
       formData.append("video", video);
 
-      const response = await api.post("/api/video", formData);
+      const response = await api.post(
+        "/api/video",
+
+        formData,
+
+        {
+          withCredentials: true,
+
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        },
+      );
 
       toast.success(response.data.message || "Video uploaded successfully.");
 
       setTitle("");
+
       setDescription("");
+
       setCategory(categories[0]);
+
       setIsPremium(false);
+
       setThumbnail(null);
+
       setVideo(null);
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -85,6 +111,7 @@ const UploadVideo = () => {
 
           <form onSubmit={handleSubmit} className="mt-8 space-y-6">
             {/* Title */}
+
             <div>
               <label className="block mb-2 text-sm font-medium text-gray-300">
                 Video Title

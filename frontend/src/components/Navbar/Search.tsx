@@ -1,20 +1,49 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { IoSearchOutline } from "react-icons/io5";
-import VideoCard from "../video/Videocards.tsx";
+import { axios } from "../../utils/axios";
+import VideoCard from "../video/Videocards";
 
 const Search = () => {
   const [search, setSearch] = useState("");
+  const [videos, setVideos] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  // Replace with API data later
-  const videos:any = [];
+  useEffect(() => {
+    const fetchVideos = async () => {
+      try {
+        const response = await axios.get("http://localhost:3000/api/video");
+        setVideos(response.data.data || []);
+      } catch (error) {
+        console.error("Failed to fetch videos:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const filteredVideos = videos.filter((video:any) =>
-    video.title.toLowerCase().includes(search.toLowerCase())
-  );
+    fetchVideos();
+  }, []);
+
+  const filteredVideos = useMemo(() => {
+    if (!search.trim()) return videos;
+
+    const filtered = videos.filter((video: any) =>
+      video.title.toLowerCase().includes(search.toLowerCase())
+    );
+
+    // If nothing matches, show all videos
+    return filtered.length > 0 ? filtered : videos;
+  }, [search, videos]);
+
+  if (loading) {
+    return (
+      <section className="min-h-screen bg-background flex items-center justify-center">
+        <p className="text-text-secondary text-lg">Loading videos...</p>
+      </section>
+    );
+  }
 
   return (
     <section className="min-h-screen bg-background">
-
       <div className="max-w-6xl mx-auto px-6 py-10">
 
         <h1 className="text-3xl font-bold text-text-primary mb-8">
@@ -24,9 +53,8 @@ const Search = () => {
         {/* Search */}
 
         <div className="relative">
-
           <IoSearchOutline
-            className="absolute text-black left-5 top-1/2 -translate-y-1/2 text-text-secondary"
+            className="absolute left-5 top-1/2 -translate-y-1/2 text-black"
             size={22}
           />
 
@@ -35,35 +63,22 @@ const Search = () => {
             placeholder="Search skills..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full bg-card rounded-2xl pl-14 pr-5 font-semibold  py-4 outline-none text-black shadow border border-border focus:border-primary transition"
+            className="w-full bg-card rounded-2xl pl-14 pr-5 py-4 font-semibold outline-none text-black shadow border border-border focus:border-primary transition"
           />
-
         </div>
 
         {/* Results */}
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
+          {filteredVideos.map((video: any) => (
             <VideoCard
-                key={videos._id}
-                video={videos}
-              />
-          {/* {filteredVideos.length > 0 ? (
-            filteredVideos.map((video) => (
-              <VideoCard
-                key={video._id}
-                video={video}
-              />
-            ))
-          ) : (
-            <div className="col-span-full text-center text-text-secondary py-20">
-              No videos found.
-            </div>
-          )} */}
-
+              key={video._id}
+              video={video}
+            />
+          ))}
         </div>
 
       </div>
-
     </section>
   );
 };

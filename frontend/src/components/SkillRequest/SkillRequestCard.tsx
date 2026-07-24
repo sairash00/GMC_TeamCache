@@ -1,55 +1,119 @@
+import { useState } from "react";
 import { FaArrowUp, FaArrowDown } from "react-icons/fa";
+import axios from "axios";
+import toast from "react-hot-toast";
 
-const SkillRequestCard = ({ request }:any) => {
+const SkillRequestCard = ({ request }: any) => {
+  const [votes, setVotes] = useState(request.upvotes - request.downvotes);
+
+  const [voted, setVoted] = useState(false);
+
+  const [loading, setLoading] = useState(false);
+
+  const handleUpvote = async () => {
+    if (voted || loading) return;
+
+    try {
+      setLoading(true);
+
+      await axios.patch(
+        `http://localhost:3000/api/skill-request/${request._id}/upvote`,
+
+        {},
+
+        {
+          withCredentials: true,
+        },
+      );
+
+      setVotes((prev) => prev + 1);
+
+      setVoted(true);
+    } catch (error) {
+      toast.error("Failed to upvote");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDownvote = async () => {
+    if (voted || loading) return;
+
+    try {
+      setLoading(true);
+
+      await axios.patch(
+        `http://localhost:3000/api/skill-request/${request._id}/downvote`,
+
+        {},
+
+        {
+          withCredentials: true,
+        },
+      );
+
+      setVotes((prev) => prev - 1);
+
+      setVoted(true);
+    } catch (error) {
+      toast.error("Failed to downvote");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="flex gap-4 rounded-xl bg-slate-800 hover:bg-slate-600 transition-all duration-300 p-4">
-
       {/* Votes */}
 
       <div className="flex flex-col items-center justify-center gap-2 min-w-12 rounded-lg bg-accent px-2 py-3">
-
-        <button className="text-white hover:text-green-300 transition">
+        <button
+          onClick={handleUpvote}
+          disabled={voted || loading}
+          className={`text-white hover:text-green-300 transition ${
+            voted || loading ? "opacity-50 cursor-not-allowed" : ""
+          }`}
+        >
           <FaArrowUp size={14} />
         </button>
 
-        <span className="text-white font-bold text-sm">
-          {request.votes}
-        </span>
+        <span className="text-white font-bold text-sm">{votes}</span>
 
-        <button className="text-white hover:text-red-300 transition">
+        <button
+          onClick={handleDownvote}
+          disabled={voted || loading}
+          className={`text-white hover:text-red-300 transition ${
+            voted || loading ? "opacity-50 cursor-not-allowed" : ""
+          }`}
+        >
           <FaArrowDown size={14} />
         </button>
-
       </div>
 
       {/* Content */}
 
       <div className="flex-1">
-
         <div className="flex items-center gap-2 mb-2">
-
           <img
-            src={request.avatar}
+            src={
+              request.requestedBy.avatar.url ||
+              "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+            }
             alt={request.user}
             className="w-9 h-9 rounded-full object-cover"
           />
 
           <span className="text-sm text-gray-300">
-            {request.user}
+            {request.requestedBy.name}
           </span>
-
         </div>
 
-        <h2 className="text-white font-semibold text-lg">
-          {request.title}
-        </h2>
+        <h2 className="text-white font-semibold text-lg">{request.title}</h2>
 
         <p className="text-gray-300 text-sm mt-1 line-clamp-3">
           {request.description}
         </p>
-
       </div>
-
     </div>
   );
 };

@@ -86,6 +86,21 @@ export const getAllVideos = CatchAsync(async (req, res) => {
   return sendResponse(res, 200, "Videos fetched successfully.", videos);
 });
 
+export const getPremiumVideos = CatchAsync(async (req, res) => {
+  const videos = await Video.find({ isPremium: true })
+    .populate("uploadedBy", "name avatar")
+    .sort({
+      createdAt: -1,
+    });
+
+  return sendResponse(
+    res,
+    200,
+    "Premium videos fetched successfully.",
+    videos
+  );
+});
+
 // Get Video By Id
 
 export const getVideoById = CatchAsync(async (req, res) => {

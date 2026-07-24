@@ -1,7 +1,8 @@
 import User from "../models/user.model.js";
+import Video from "../models/video.model.js"; 
 
 import CatchAsync from "../utils/CatchAsync.js";
-import ApiError from "../utils/ApiError.js"; 
+import ApiError from "../utils/ApiError.js";
 import sendResponse from "../utils/ApiResponse.js";
 
 import uploadToCloudinary from "../utils/uploadToCloudinary.js";
@@ -58,46 +59,60 @@ export const uploadAvatar = CatchAsync(async (req, res) => {
 //user credit increment functionality its underdeveloped
 
 export const increaseCredits = CatchAsync(async (req, res) => {
-    const { minutes } = req.body;
+  const { videoId } = req.body;
 
-    if (minutes === undefined || minutes < 0) {
-        throw new ApiError(400, "Valid watched minutes are required.");
-    }
+  if (!videoId) {
+    throw new ApiError(400, "Video ID is required.");
+  }
 
-    const creditsEarned = Math.floor(Number(minutes) / 5);
+  const user = await User.findById(req.user._id);
 
-    const user = await User.findById(req.user._id);
+  if (!user) {
+    throw new ApiError(404, "User not found.");
+  }
 
-    if (!user) {
-        throw new ApiError(404, "User not found.");
-    }
+  const video = await Video.findById(videoId);
 
-    user.credits += creditsEarned;
+  if (!video) {
+    throw new ApiError(404, "Video not found.");
+  }
 
-    await user.save();
+  const alreadyRewarded = user.rewardedVideos.some(
+    (id) => id.toString() === videoId,
+  );
 
-    return sendResponse(
-        res,
-        200,
-        "Credits updated successfully.",
-        {
-            creditsEarned,
-            totalCredits: user.credits,
-        }
-    );
+  if (alreadyRewarded) {
+    return sendResponse(res, 401, "Credits already awarded for this video.", {
+      creditsEarned: 0,
+      credits: user.credits,
+    });
+  }
+
+  // Reward: 10 credit per completed video
+  const creditsEarned = 10;
+
+  user.credits += creditsEarned;
+  user.rewardedVideos.push(video._id);
+
+  await user.save();
+
+  return sendResponse(res, 200, "Credits awarded successfully.", {
+    creditsEarned,
+    credits: user.credits,
+  });
 });
 
 export const getUnlockedPremiumVideos = CatchAsync(async (req, res) => {
-    const user = await User.findById(req.user._id).select("premiumVideos");
+  const user = await User.findById(req.user._id).select("premiumVideos");
 
-    if (!user) {
-        throw new ApiError(404, "User not found.");
-    }
+  if (!user) {
+    throw new ApiError(404, "User not found.");
+  }
 
-    return sendResponse(
-        res,
-        200,
-        "Unlocked premium videos fetched successfully.",
-        user.premiumVideos
-    );
+  return sendResponse(
+    res,
+    200,
+    "Unlocked premium videos fetched successfully.",
+    user.premiumVideos,
+  );
 });

@@ -60,7 +60,17 @@ const userSchema = new mongoose.Schema(
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "Video",
             },
-],
+        
+        ],
+        rewardedVideos: {
+        type: [
+            {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Video",
+            },
+        ],
+        default: [],
+        },
     },
     {
         timestamps: true,

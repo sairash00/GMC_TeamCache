@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 
 const VideoCard = ({ video }:any) => {
+  // console.log(video)
   return (
     <Link
       to={`/video/${video._id}`}
@@ -9,7 +10,7 @@ const VideoCard = ({ video }:any) => {
       {/* Thumbnail */}
       <div className="overflow-hidden rounded-xl">
         <img
-          src={video.thumbnail}
+          src={video.thumbnail.url}
           alt={video.title}
           className="aspect-video w-full object-cover rounded-xl transition-transform duration-300 group-hover:scale-[1.03]"
         />
@@ -23,7 +24,7 @@ const VideoCard = ({ video }:any) => {
         </h2>
 
         <p className="mt-1 text-xs text-text-secondary">
-          {video.creator || "Unknown Creator"}
+          {video.uploadedBy.name || "Unknown Creator"}
         </p>
 
       </div>

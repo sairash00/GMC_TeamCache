@@ -6,6 +6,7 @@ import {
   getVideoById,
   unlockPremiumVideo,
   deleteVideo,
+  getPremiumVideos,
 } from "../controllers/video.controller.js";
 
 import verifyJWT from "../middlewares/auth.middleware.js";
@@ -30,6 +31,7 @@ router.post(
 );
 
 router.get("/", getAllVideos);
+router.get("/getPremiumVideos", verifyJWT, getPremiumVideos)
 
 router.get("/:id", getVideoById);
 

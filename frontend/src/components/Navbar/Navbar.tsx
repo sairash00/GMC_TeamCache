@@ -9,9 +9,7 @@ import {
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
-
-  const avatar =
-    "https://ui-avatars.com/api/?name=User&background=111844&color=fff";
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
 
   return (
     <>
@@ -24,7 +22,7 @@ const Navbar = () => {
         <div className="flex justify-between items-center p-5 border-b border-divider">
           <div className="flex items-center gap-3">
             <img
-              src={avatar}
+              src={user.avatar.url || ""}
               alt="avatar"
               className="w-11 h-11 rounded-full object-cover border border-border"
             />
@@ -32,7 +30,7 @@ const Navbar = () => {
             <div>
               <h3 className="font-semibold text-text-primary">John Doe</h3>
               <p className="text-xs text-credits font-medium">
-                120 Credits
+                {user.credits} Credits
               </p>
             </div>
           </div>
@@ -123,7 +121,7 @@ const Navbar = () => {
             className="hidden md:flex items-center gap-2 bg-surface px-3 py-2 rounded-xl shadow text-sm font-semibold text-credits hover:shadow-hover transition"
           >
             <IoWalletOutline size={18} />
-            <span>120</span>
+            <span>{user.credits || "0"}</span>
           </Link>
 
           {/* Search */}
@@ -137,7 +135,7 @@ const Navbar = () => {
           {/* Avatar */}
           <Link to="/profile">
             <img
-              src={avatar}
+              src={user.avatar.url}
               alt="profile"
               className="w-9 h-9 rounded-full object-cover border-2 border-accent hover:border-primary transition"
             />

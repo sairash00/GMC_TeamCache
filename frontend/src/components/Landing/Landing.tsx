@@ -36,7 +36,7 @@ const Landing = () => {
           </p>
 
           <Link
-            to="/home"
+            to="/videos"
             className="inline-flex items-center mt-7 px-8 py-3 rounded-xl border-2 border-primary text-primary text-sm font-semibold hover:bg-primary hover:text-white hover:shadow-hover hover:-translate-y-1 transition-all duration-300"
           >
             Get Started

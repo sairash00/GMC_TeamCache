@@ -87,7 +87,7 @@ const Register: React.FC = () => {
 
     try {
       const response = await axios.post<ApiResponse>(
-        import.meta.env.VITE_REGISTER,
+        "http://localhost:3000/api/auth/register",
         {
           name: data.name,
           email: data.email,

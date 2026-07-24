@@ -75,7 +75,7 @@ const Login: React.FC = () => {
 
     try {
       const response = await axios.post<ApiResponse>(
-        import.meta.env.VITE_LOGIN,
+        "http://localhost:3000/api/auth/login",
         {
           email: data.email,
           password: data.password,
@@ -86,14 +86,12 @@ const Login: React.FC = () => {
       );
 
       toast.success(response.data.message || "Login Successful");
-
-      // Save logged-in user
-      if (response.data.user) {
+     
         localStorage.setItem(
-          "userInfo",
-          JSON.stringify(response.data.user)
+          "user",
+          JSON.stringify(response.data?.data)
         );
-      }
+      
 
       setData({
         email: "",

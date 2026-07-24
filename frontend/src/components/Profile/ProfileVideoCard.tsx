@@ -4,12 +4,13 @@ import axios from "axios";
 import toast from "react-hot-toast";
 
 const ProfileVideoCard = ({ video }: { video: any }) => {
+  // console.log(video)
   const handleDelete = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     e.preventDefault();
     e.stopPropagation();
-
+    
     try {
       // Later replace with your endpoint
       // await axios.delete(
@@ -19,7 +20,7 @@ const ProfileVideoCard = ({ video }: { video: any }) => {
       //   }
       // );
 
-      console.log("Deleting:", video._id);
+      // console.log("Deleting:", video._id);
 
       toast.success("Video deleted.");
 
@@ -53,7 +54,7 @@ const ProfileVideoCard = ({ video }: { video: any }) => {
 
       {/* Thumbnail */}
       <img
-        src={video.thumbnail}
+        src={video.thumbnail.url}
         alt={video.title}
         className="w-full aspect-video rounded-xl object-cover"
       />

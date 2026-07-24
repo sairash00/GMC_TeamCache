@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 const CreateRequestModal = ({ open, setOpen }: any) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+
   const [loading, setLoading] = useState(false);
 
   if (!open) return null;
@@ -19,33 +20,28 @@ const CreateRequestModal = ({ open, setOpen }: any) => {
     try {
       setLoading(true);
 
-      // Backend integration later
-      // await axios.post(
-      //   `${import.meta.env.VITE_API_URL}/api/skill-request`,
-      //   {
-      //     title,
-      //     description,
-      //   },
-      //   {
-      //     withCredentials: true,
-      //   }
-      // );
+      await axios.post(
+        "http://localhost:3000/api/skill-request",
 
-      console.log({
-        title,
-        description,
-      });
+        {
+          title,
+          description,
+        },
+
+        {
+          withCredentials: true,
+        },
+      );
 
       toast.success("Request submitted.");
 
       setTitle("");
       setDescription("");
-
-      // DO NOT close modal.
-      // User closes it manually using the ✕ button.
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        toast.error(error.response?.data?.message || "Couldn't create request.");
+        toast.error(
+          error.response?.data?.message || "Couldn't create request.",
+        );
       } else {
         toast.error("Something went wrong.");
       }
@@ -62,7 +58,6 @@ const CreateRequestModal = ({ open, setOpen }: any) => {
       {/* Modal */}
       <div className="fixed inset-0 z-50 flex items-center justify-center px-5">
         <div className="w-full max-w-xl rounded-2xl bg-slate-700 border border-slate-600 shadow-2xl">
-
           {/* Header */}
           <div className="flex items-center justify-between px-6 py-5 border-b border-slate-600">
             <div>
@@ -85,11 +80,8 @@ const CreateRequestModal = ({ open, setOpen }: any) => {
 
           {/* Body */}
           <div className="p-6 space-y-5">
-
             <div>
-              <label className="block text-sm text-gray-300 mb-2">
-                Title
-              </label>
+              <label className="block text-sm text-gray-300 mb-2">Title</label>
 
               <input
                 type="text"
@@ -113,12 +105,10 @@ const CreateRequestModal = ({ open, setOpen }: any) => {
                 className="w-full rounded-xl border border-slate-600 bg-slate-800 text-white px-4 py-3 outline-none resize-none focus:border-accent transition"
               />
             </div>
-
           </div>
 
           {/* Footer */}
           <div className="flex justify-end px-6 py-5 border-t border-slate-600">
-
             <button
               onClick={handleSubmit}
               disabled={loading}
@@ -126,9 +116,7 @@ const CreateRequestModal = ({ open, setOpen }: any) => {
             >
               {loading ? "Creating..." : "Create Request"}
             </button>
-
           </div>
-
         </div>
       </div>
     </>
