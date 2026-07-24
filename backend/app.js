@@ -38,12 +38,12 @@ app.use("/api/user", userRoutes)
 
 
 // 404 route not found handler || invalid routes
-app.use("*", (req, res) => {
-    res.status(404).json({
-        success: false,
-        message: "Route Not Found"
-    });
-});
+// app.use("*", (req, res) => {
+//     res.status(404).json({
+//         success: false,
+//         message: "Route Not Found"
+//     });
+// });
 
 app.use(errorHandler);
 

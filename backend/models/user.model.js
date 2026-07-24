@@ -42,6 +42,19 @@ const userSchema = new mongoose.Schema(
             enum: ["user", "admin"],
             default: "user",
         },
+
+        credits: {
+            type: Number,
+            default: 0,
+            min: 0,
+        },
+
+        uploadedVideos: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Video",
+            },
+        ],
     },
     {
         timestamps: true,
@@ -64,4 +77,4 @@ userSchema.methods.comparePassword = async function (password) {
 
 const User = mongoose.model("User", userSchema);
 
-export default User;
+export default User; 
