@@ -3,215 +3,164 @@ import Video from "../models/video.model.js";
 
 import CatchAsync from "../utils/CatchAsync.js";
 import ApiError from "../utils/ApiError.js";
-import sendResponse from "../utils/sendResponse.js";
+import sendResponse from "../utils/ApiResponse.js";
 
-import {
-    uploadToCloudinary,
-    uploadVideoToCloudinary,
-    deleteFromCloudinary,
-    deleteVideoFromCloudinary,
-} from "../utils/cloudinary.js";
+import uploadToCloudinary from "../utils/uploadToCloudinary.js";
+import uploadVideoToCloudinary from "../utils/uploadToCloudinaryVideo.js";
 
+import deleteFromCloudinary from "../utils/deleteFromCloudinary.js";
+import deleteVideoFromCloudinary from "../utils/deleteFromCloudinaryVideo.js";
 
-//upload video
+// Upload Video
+
 export const uploadVideo = CatchAsync(async (req, res) => {
-    const { title, description, category, duration, isPremium } = req.body;
+  const { title, description, category, isPremium } = req.body;
 
-    if (!req.files?.thumbnail?.length) {
-        throw new ApiError(400, "Thumbnail is required.");
-    }
+  if (!req.files?.thumbnail?.length) {
+    throw new ApiError(400, "Thumbnail is required.");
+  }
 
-    if (!req.files?.video?.length) {
-        throw new ApiError(400, "Video is required.");
-    }
+  if (!req.files?.video?.length) {
+    throw new ApiError(400, "Video is required.");
+  }
 
-    const thumbnailLocalPath = req.files.thumbnail[0].path;
-    const videoLocalPath = req.files.video[0].path;
+  const thumbnailLocalPath = req.files.thumbnail[0].path;
+  const videoLocalPath = req.files.video[0].path;
 
-    const uploadedThumbnail = await uploadToCloudinary(thumbnailLocalPath);
+  const uploadedThumbnail = await uploadToCloudinary(thumbnailLocalPath);
 
-    if (!uploadedThumbnail) {
-        throw new ApiError(500, "Thumbnail upload failed.");
-    }
+  if (!uploadedThumbnail?.url) {
+    throw new ApiError(500, "Thumbnail upload failed.");
+  }
 
-    const uploadedVideo = await uploadVideoToCloudinary(videoLocalPath);
+  const uploadedVideo = await uploadVideoToCloudinary(videoLocalPath);
 
-    if (!uploadedVideo) {
-        throw new ApiError(500, "Video upload failed.");
-    }
+  if (!uploadedVideo?.url) {
+    throw new ApiError(500, "Video upload failed.");
+  }
 
-    const creditsRequired =
-        isPremium === "true" || isPremium === true
-            ? Number(duration) * 6
-            : 0;
+  const premium = isPremium === true || isPremium === "true";
 
-    const video = await Video.create({
-        title,
-        description,
-        category,
-        duration,
-        isPremium,
-        creditsRequired,
+  const creditsRequired = premium ? 30 : 0;
 
-        thumbnail: {
-            public_id: uploadedThumbnail.public_id,
-            url: uploadedThumbnail.url,
-        },
+  const video = await Video.create({
+    title,
 
-        video: {
-            public_id: uploadedVideo.public_id,
-            url: uploadedVideo.url,
-        },
+    description,
 
-        uploadedBy: req.user._id,
-    });
+    category,
 
-    await User.findByIdAndUpdate(req.user._id, {
-        $push: {
-            uploadedVideos: video._id,
-        },
-    });
+    isPremium: premium,
 
-    return sendResponse(
-        res,
-        201,
-        true,
-        "Video uploaded successfully.",
-        video
-    );
+    creditsRequired,
+
+    thumbnail: {
+      public_id: uploadedThumbnail.public_id,
+      url: uploadedThumbnail.url,
+    },
+
+    video: {
+      public_id: uploadedVideo.public_id,
+      url: uploadedVideo.url,
+    },
+
+    uploadedBy: req.user._id,
+  });
+
+  await User.findByIdAndUpdate(req.user._id, {
+    $push: {
+      uploadedVideos: video._id,
+    },
+  });
+
+  return sendResponse(res, 201, true, "Video uploaded successfully.", video);
 });
 
-
-
-//get all videos
+// Get All Videos
 
 export const getAllVideos = CatchAsync(async (req, res) => {
-    const videos = await Video.find()
-        .populate("uploadedBy", "name avatar")
-        .sort({ createdAt: -1 });
+  const videos = await Video.find().populate("uploadedBy", "name avatar").sort({
+    createdAt: -1,
+  });
 
-    return sendResponse(
-        res,
-        200,
-        true,
-        "Videos fetched successfully.",
-        videos
-    );
+  return sendResponse(res, 200, true, "Videos fetched successfully.", videos);
 });
 
-
-
-//get videos by id
+// Get Video By Id
 
 export const getVideoById = CatchAsync(async (req, res) => {
-    const { id } = req.params;
+  const { id } = req.params;
 
-    const video = await Video.findById(id).populate(
-        "uploadedBy",
-        "name avatar"
-    );
+  const video = await Video.findById(id).populate("uploadedBy", "name avatar");
 
-    if (!video) {
-        throw new ApiError(404, "Video not found.");
-    }
+  if (!video) {
+    throw new ApiError(404, "Video not found.");
+  }
 
-    video.views += 1;
-    await video.save();
+  video.views += 1;
 
-    return sendResponse(
-        res,
-        200,
-        true,
-        "Video fetched successfully.",
-        video
-    );
+  await video.save();
+
+  return sendResponse(res, 200, true, "Video fetched successfully.", video);
 });
 
-
-
-//unlock premium videos
-// lets ditch this idea for now 
+// Unlock Premium Video
 
 export const unlockPremiumVideo = CatchAsync(async (req, res) => {
-    const { id } = req.params;
+  const { id } = req.params;
 
-    const video = await Video.findById(id);
+  const video = await Video.findById(id);
 
-    if (!video) {
-        throw new ApiError(404, "Video not found.");
-    }
+  if (!video) {
+    throw new ApiError(404, "Video not found.");
+  }
 
-    if (!video.isPremium) {
-        return sendResponse(
-            res,
-            200,
-            true,
-            "This video is already free.",
-            video
-        );
-    }
+  if (!video.isPremium) {
+    return sendResponse(res, 200, true, "This video is already free.", video);
+  }
 
-    const user = await User.findById(req.user._id);
+  const user = await User.findById(req.user._id);
 
-    if (user.credits < video.creditsRequired) {
-        throw new ApiError(
-            400,
-            "Not enough Skill Credits to unlock this video."
-        );
-    }
+  if (user.credits < video.creditsRequired) {
+    throw new ApiError(400, "Not enough Skill Credits to unlock this video.");
+  }
 
-    user.credits -= video.creditsRequired;
+  user.credits -= video.creditsRequired;
 
-    await user.save();
+  await user.save();
 
-    return sendResponse(
-        res,
-        200,
-        true,
-        "Premium video unlocked successfully.",
-        {
-            remainingCredits: user.credits,
-            video,
-        }
-    );
+  return sendResponse(res, 200, true, "Premium video unlocked successfully.", {
+    remainingCredits: user.credits,
+    video,
+  });
 });
 
-
-
-//delete videos
+// Delete Video
 
 export const deleteVideo = CatchAsync(async (req, res) => {
-    const { id } = req.params;
+  const { id } = req.params;
 
-    const video = await Video.findById(id);
+  const video = await Video.findById(id);
 
-    if (!video) {
-        throw new ApiError(404, "Video not found.");
-    }
+  if (!video) {
+    throw new ApiError(404, "Video not found.");
+  }
 
-    if (video.uploadedBy.toString() !== req.user._id.toString()) {
-        throw new ApiError(
-            403,
-            "You are not authorized to delete this video."
-        );
-    }
+  if (video.uploadedBy.toString() !== req.user._id.toString()) {
+    throw new ApiError(403, "You are not authorized to delete this video.");
+  }
 
-    await deleteFromCloudinary(video.thumbnail.public_id);
+  await deleteFromCloudinary(video.thumbnail.public_id);
 
-    await deleteVideoFromCloudinary(video.video.public_id);
+  await deleteVideoFromCloudinary(video.video.public_id);
 
-    await User.findByIdAndUpdate(req.user._id, {
-        $pull: {
-            uploadedVideos: video._id,
-        },
-    });
+  await User.findByIdAndUpdate(req.user._id, {
+    $pull: {
+      uploadedVideos: video._id,
+    },
+  });
 
-    await video.deleteOne();
+  await video.deleteOne();
 
-    return sendResponse(
-        res,
-        200,
-        true,
-        "Video deleted successfully."
-    );
+  return sendResponse(res, 200, true, "Video deleted successfully.");
 });
