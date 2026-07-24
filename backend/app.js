@@ -29,7 +29,7 @@ app.use(morgan("dev"));
 app.get("/", (req, res) => {
     res.json({
         success: true,
-        message: "Server Running 🚀"
+        message: "Server Running "
     });
 });
 
