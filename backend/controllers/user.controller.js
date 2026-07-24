@@ -1,13 +1,13 @@
 import User from "../models/user.model.js";
 
 import CatchAsync from "../utils/CatchAsync.js";
-import ApiError from "../utils/ApiError.js";
+import ApiError from "../utils/ApiError.js"; 
 import sendResponse from "../utils/ApiResponse.js";
 
 import uploadToCloudinary from "../utils/uploadToCloudinary.js";
 import deleteFromCloudinary from "../utils/deleteFromCloudinary.js";
 
-// Get My Profile
+// Get My Profile checked
 
 export const getProfile = CatchAsync(async (req, res) => {
   const user = await User.findById(req.user._id)
@@ -24,7 +24,7 @@ export const getProfile = CatchAsync(async (req, res) => {
   return sendResponse(res, 200, "Profile fetched successfully.", user);
 });
 
-// Upload Avatar
+// Upload Avatar checked
 
 export const uploadAvatar = CatchAsync(async (req, res) => {
   if (!req.file) {

@@ -11,3 +11,4 @@ router.get("/me", verifyJWT, getProfile);
 router.patch("/avatar", verifyJWT, upload.single("avatar"), uploadAvatar);
 
 export default router;
+ 
