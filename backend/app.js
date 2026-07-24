@@ -31,7 +31,7 @@ app.get("/", (req, res) => {
         success: true,
         message: "Server Running "
     });
-});
+}); 
 
 //route setup codes 
 

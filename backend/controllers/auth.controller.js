@@ -9,9 +9,9 @@ const cookieOptions = {
   secure: process.env.NODE_ENV === "production",
   sameSite: "strict",
   maxAge: 7 * 24 * 60 * 60 * 1000,
-};
+}; 
 
-// register user
+// register user checked
 export const register = CatchAsync(async (req, res) => {
   const { name, email, password } = req.body;
 
@@ -42,8 +42,7 @@ export const register = CatchAsync(async (req, res) => {
   });
 });
 
-//login user
-
+//login user checked
 export const login = CatchAsync(async (req, res) => {
   const { email, password } = req.body;
 
@@ -68,7 +67,7 @@ export const login = CatchAsync(async (req, res) => {
   return sendResponse(res, 200, "Login successful.", user);
 });
 
-//logout
+//logout checked
 
 export const logout = CatchAsync(async (req, res) => {
   res.clearCookie("token");
@@ -77,7 +76,7 @@ export const logout = CatchAsync(async (req, res) => {
 });
 
 
-// get user profile
+// get user profile checked
 export const getProfile = CatchAsync(async (req, res) => {
   return sendResponse(res, 200, "Profile fetched successfully.", req.user);
 });
