@@ -1,12 +1,13 @@
-import express from "express";
+import { Router } from "express";
 
-import { uploadAvatar } from "../controllers/user.controller.js";
+import { getProfile, uploadAvatar } from "../controllers/user.controller.js";
 
-import auth from "../middlewares/auth.middleware.js";
-import upload from "../middlewares/upload.middleware.js";
+import verifyJWT from "../middlewares/auth.middleware.js";
+import upload from "../middlewares/multer.middleware.js";
 
-const router = express.Router();
+const router = Router();
 
-router.patch("/avatar", auth, upload.single("avatar"), uploadAvatar);
+router.get("/me", verifyJWT, getProfile);
+router.patch("/avatar", verifyJWT, upload.single("avatar"), uploadAvatar);
 
 export default router;
