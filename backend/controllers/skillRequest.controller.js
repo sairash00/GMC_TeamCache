@@ -2,9 +2,9 @@ import SkillRequest from "../models/skillRequest.model.js";
 
 import CatchAsync from "../utils/CatchAsync.js";
 import ApiError from "../utils/ApiError.js";
-import sendResponse from "../utils/ApiResponse.js";
+import sendResponse from "../utils/ApiResponse.js"; 
 
-// Create Skill Request
+// Create Skill Request checked
 
 export const createSkillRequest = CatchAsync(async (req, res) => {
   const { title, description } = req.body;
@@ -18,13 +18,12 @@ export const createSkillRequest = CatchAsync(async (req, res) => {
   return sendResponse(
     res,
     201,
-    true,
     "Skill request created successfully.",
     skillRequest,
   );
 });
 
-// Get All Skill Requests
+// Get All Skill checked
 
 export const getAllSkillRequests = CatchAsync(async (req, res) => {
   const requests = await SkillRequest.find()
@@ -36,13 +35,12 @@ export const getAllSkillRequests = CatchAsync(async (req, res) => {
   return sendResponse(
     res,
     200,
-    true,
     "Skill requests fetched successfully.",
     requests,
   );
 });
 
-// Upvote Skill Request
+// Upvote Skill Request checked
 
 export const upvoteSkillRequest = CatchAsync(async (req, res) => {
   const { id } = req.params;
@@ -60,13 +58,12 @@ export const upvoteSkillRequest = CatchAsync(async (req, res) => {
   return sendResponse(
     res,
     200,
-    true,
     "Skill request upvoted successfully.",
     request,
   );
 });
 
-// Downvote Skill Request
+// Downvote Skill Request checked
 
 export const downvoteSkillRequest = CatchAsync(async (req, res) => {
   const { id } = req.params;
@@ -84,13 +81,12 @@ export const downvoteSkillRequest = CatchAsync(async (req, res) => {
   return sendResponse(
     res,
     200,
-    true,
     "Skill request downvoted successfully.",
     request,
   );
 });
 
-// Delete Skill Request
+// Delete Skill Request checked
 
 export const deleteSkillRequest = CatchAsync(async (req, res) => {
   const { id } = req.params;

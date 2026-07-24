@@ -4,7 +4,7 @@ import {
   createSkillRequest,
   getAllSkillRequests,
   upvoteSkillRequest,
-  downvoteSkillRequest,
+  downvoteSkillRequest, 
   deleteSkillRequest,
 } from "../controllers/skillRequest.controller.js";
 
