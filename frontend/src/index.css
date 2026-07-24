@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+*{
+  font-family: 'quicksand', 'arial';
+}
+
+html, body{
+    background: #12162A;
+    color: whitesmoke;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+body *::-webkit-scrollbar{
+    width:4px;
+    background: transparent;
+}
+
+body *::-webkit-scrollbar-thumb{
+    background-color: #FC4E03;
+    border-radius: 50px;
+}
+

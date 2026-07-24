@@ -55,6 +55,12 @@ const userSchema = new mongoose.Schema(
                 ref: "Video",
             },
         ],
+        premiumVideos: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Video",
+            },
+],
     },
     {
         timestamps: true,

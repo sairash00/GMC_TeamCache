@@ -54,3 +54,50 @@ export const uploadAvatar = CatchAsync(async (req, res) => {
     avatar: user.avatar,
   });
 });
+
+//user credit increment functionality its underdeveloped
+
+export const increaseCredits = CatchAsync(async (req, res) => {
+    const { minutes } = req.body;
+
+    if (minutes === undefined || minutes < 0) {
+        throw new ApiError(400, "Valid watched minutes are required.");
+    }
+
+    const creditsEarned = Math.floor(Number(minutes) / 5);
+
+    const user = await User.findById(req.user._id);
+
+    if (!user) {
+        throw new ApiError(404, "User not found.");
+    }
+
+    user.credits += creditsEarned;
+
+    await user.save();
+
+    return sendResponse(
+        res,
+        200,
+        "Credits updated successfully.",
+        {
+            creditsEarned,
+            totalCredits: user.credits,
+        }
+    );
+});
+
+export const getUnlockedPremiumVideos = CatchAsync(async (req, res) => {
+    const user = await User.findById(req.user._id).select("premiumVideos");
+
+    if (!user) {
+        throw new ApiError(404, "User not found.");
+    }
+
+    return sendResponse(
+        res,
+        200,
+        "Unlocked premium videos fetched successfully.",
+        user.premiumVideos
+    );
+});

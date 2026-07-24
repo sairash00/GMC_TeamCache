@@ -1,0 +1,212 @@
+{
+  "project": {
+    "name": "SkillSnap",
+    "team": "Team Cache",
+    "tagline": "Learn. Earn. Request.",
+    "description": "A community-driven micro-learning platform where users watch short educational videos, earn Skill Credits, upload their own skills, and request skills from the community."
+  },
+
+  "techStack": {
+    "frontend": [
+      "React",
+      "Vite",
+      "Tailwind CSS"
+    ],
+    "backend": [
+      "Express.js",
+      "MongoDB",
+      "Mongoose",
+      "JWT Authentication",
+      "Cloudinary",
+      "Multer",
+      "Zod"
+    ]
+  },
+
+  "authentication": {
+    "type": "JWT stored inside HTTP Only Cookie",
+    "protectedRoutes": true
+  },
+
+  "models": {
+    "User": {
+      "fields": [
+        "name",
+        "email",
+        "password",
+        "avatar",
+        "role",
+        "credits",
+        "uploadedVideos"
+      ]
+    },
+
+    "Video": {
+      "fields": [
+        "title",
+        "description",
+        "thumbnail",
+        "video",
+        "category",
+        "isPremium",
+        "creditsRequired",
+        "uploadedBy",
+        "views"
+      ]
+    },
+
+    "SkillRequest": {
+      "fields": [
+        "title",
+        "description",
+        "requestedBy",
+        "upvotes",
+        "downvotes",
+        "status"
+      ]
+    }
+  },
+
+  "api": {
+
+    "auth": {
+
+      "register": {
+        "method": "POST",
+        "endpoint": "/api/auth/register",
+        "contentType": "application/json",
+        "body": {
+          "name": "string",
+          "email": "string",
+          "password": "string"
+        }
+      },
+
+      "login": {
+        "method": "POST",
+        "endpoint": "/api/auth/login",
+        "contentType": "application/json",
+        "body": {
+          "email": "string",
+          "password": "string"
+        }
+      },
+
+      "logout": {
+        "method": "POST",
+        "endpoint": "/api/auth/logout",
+        "authentication": true,
+        "body": {}
+      }
+
+    },
+
+    "user": {
+
+      "getProfile": {
+        "method": "GET",
+        "endpoint": "/api/user/me",
+        "authentication": true,
+        "returns": [
+          "user info",
+          "avatar",
+          "credits",
+          "uploadedVideos(populated)"
+        ]
+      },
+
+      "uploadAvatar": {
+        "method": "PATCH",
+        "endpoint": "/api/user/avatar",
+        "authentication": true,
+        "contentType": "multipart/form-data",
+        "body": {
+          "avatar": "File"
+        }
+      }
+
+    },
+
+    "video": {
+
+      "uploadVideo": {
+        "method": "POST",
+        "endpoint": "/api/video",
+        "authentication": true,
+        "contentType": "multipart/form-data",
+
+        "body": {
+          "title": "string",
+          "description": "string",
+          "category": "string",
+          "isPremium": "boolean (true/false as text)",
+          "thumbnail": "File",
+          "video": "File"
+        }
+      },
+
+      "getAllVideos": {
+        "method": "GET",
+        "endpoint": "/api/video"
+      },
+
+      "getVideoById": {
+        "method": "GET",
+        "endpoint": "/api/video/:id"
+      },
+
+      "deleteVideo": {
+        "method": "DELETE",
+        "endpoint": "/api/video/:id",
+        "authentication": true
+      },
+
+      "unlockPremiumVideo": {
+        "method": "POST",
+        "endpoint": "/api/video/:id/unlock",
+        "authentication": true
+      }
+
+    },
+
+    "skillRequests": {
+
+      "create": {
+        "method": "POST",
+        "endpoint": "/api/skill-request",
+        "authentication": true,
+        "contentType": "application/json",
+
+        "body": {
+          "title": "string",
+          "description": "string"
+        }
+      },
+
+      "getAll": {
+        "method": "GET",
+        "endpoint": "/api/skill-request"
+      },
+
+      "upvote": {
+        "method": "PATCH",
+        "endpoint": "/api/skill-request/:id/upvote",
+        "authentication": true
+      },
+
+      "downvote": {
+        "method": "PATCH",
+        "endpoint": "/api/skill-request/:id/downvote",
+        "authentication": true
+      },
+
+      "delete": {
+        "method": "DELETE",
+        "endpoint": "/api/skill-request/:id",
+        "authentication": true
+      }
+
+    }
+
+  }
+}

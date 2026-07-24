@@ -107,32 +107,69 @@ export const getVideoById = CatchAsync(async (req, res) => {
 // Unlock Premium Video
 // ditching it for the time being
 export const unlockPremiumVideo = CatchAsync(async (req, res) => {
-  const { id } = req.params;
+    const { id } = req.params;
 
-  const video = await Video.findById(id);
+    const video = await Video.findById(id);
 
-  if (!video) {
-    throw new ApiError(404, "Video not found.");
-  }
+    if (!video) {
+        throw new ApiError(404, "Video not found.");
+    }
 
-  if (!video.isPremium) {
-    return sendResponse(res, 200, "This video is already free.", video);
-  }
+    if (!video.isPremium) {
+        return sendResponse(
+            res,
+            200,
+            "This video is already free.",
+            {
+                videoId: video._id,
+            }
+        );
+    }
 
-  const user = await User.findById(req.user._id);
+    const user = await User.findById(req.user._id);
 
-  if (user.credits < video.creditsRequired) {
-    throw new ApiError(400, "Not enough Skill Credits to unlock this video.");
-  }
+    if (!user) {
+        throw new ApiError(404, "User not found.");
+    }
 
-  user.credits -= video.creditsRequired;
+    // Already unlocked
+    if (
+        user.premiumVideos.some(
+            (videoId) => videoId.toString() === video._id.toString()
+        )
+    ) {
+        return sendResponse(
+            res,
+            200,
+            "Video already unlocked.",
+            {
+                videoId: video._id,
+            }
+        );
+    }
 
-  await user.save();
+    if (user.credits < video.creditsRequired) {
+        throw new ApiError(
+            400,
+            "Not enough Skill Credits to unlock this video."
+        );
+    }
 
-  return sendResponse(res, 200,"Premium video unlocked successfully.", {
-    remainingCredits: user.credits,
-    video,
-  });
+    user.credits -= video.creditsRequired;
+
+    user.premiumVideos.push(video._id);
+
+    await user.save();
+
+    return sendResponse(
+        res,
+        200,
+        "Premium video unlocked successfully.",
+        {
+            videoId: video._id,
+            remainingCredits: user.credits,
+        }
+    );
 });
 
 // Delete Video
