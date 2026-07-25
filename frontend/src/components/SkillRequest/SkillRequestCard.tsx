@@ -38,8 +38,8 @@ const SkillRequestCard = ({ request }: any) => {
 
       setVotes((prev) => prev + 1);
       setVoted(true);
-    } catch (error) {
-      toast.error("Failed to upvote");
+    } catch (error:any) {
+      toast.error(error?.message);
     } finally {
       setLoading(false);
     }
@@ -61,8 +61,8 @@ const SkillRequestCard = ({ request }: any) => {
 
       setVotes((prev) => prev - 1);
       setVoted(true);
-    } catch (error) {
-      toast.error("Failed to downvote");
+    } catch (error:any) {
+      toast.error(error.message);
     } finally {
       setLoading(false);
     }
@@ -89,7 +89,7 @@ const SkillRequestCard = ({ request }: any) => {
     );
   }
 };
-  console.log(request);
+
 
   return (
     <div className="relative flex gap-4 rounded-xl bg-slate-800 hover:bg-slate-600 transition-all duration-300 p-4">

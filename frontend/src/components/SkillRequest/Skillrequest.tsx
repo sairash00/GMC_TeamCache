@@ -10,7 +10,7 @@ const SkillRequests = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
-  const [requests, setRequests] = useState<any[]>([]);
+  const [requests, setRequests] = useState<any>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -97,7 +97,7 @@ const SkillRequests = () => {
 
           {/* Requests */}
           <div className="flex-1 overflow-y-auto pr-2 space-y-4">
-            {requests.data.map((request) => (
+            {requests.data?.map((request:any) => (
               <SkillRequestCard key={request._id} request={request} />
             ))}
           </div>

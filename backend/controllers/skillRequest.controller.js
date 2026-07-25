@@ -42,6 +42,8 @@ export const getAllSkillRequests = CatchAsync(async (req, res) => {
 
 // Upvote Skill Request checked
 
+// Upvote Skill Request
+
 export const upvoteSkillRequest = CatchAsync(async (req, res) => {
   const { id } = req.params;
 
@@ -51,19 +53,48 @@ export const upvoteSkillRequest = CatchAsync(async (req, res) => {
     throw new ApiError(404, "Skill request not found.");
   }
 
+  const alreadyUpvoted = request.upvotedBy.some(
+    (userId) => userId.toString() === req.user._id.toString()
+  );
+
+  const alreadyDownvoted = request.downvotedBy.some(
+    (userId) => userId.toString() === req.user._id.toString()
+  );
+
+
+  if (alreadyUpvoted) {
+    throw new ApiError(
+      409,
+      "You have already upvoted this skill request."
+    );
+  }
+
+
+  if (alreadyDownvoted) {
+    throw new ApiError(
+      409,
+      "You have already downvoted this skill request. You cannot upvote again."
+    );
+  }
+
+
   request.upvotes += 1;
 
+  request.upvotedBy.push(req.user._id);
+
   await request.save();
+
 
   return sendResponse(
     res,
     200,
     "Skill request upvoted successfully.",
-    request,
+    request
   );
 });
 
-// Downvote Skill Request checked
+
+// Downvote Skill Request
 
 export const downvoteSkillRequest = CatchAsync(async (req, res) => {
   const { id } = req.params;
@@ -74,18 +105,48 @@ export const downvoteSkillRequest = CatchAsync(async (req, res) => {
     throw new ApiError(404, "Skill request not found.");
   }
 
+
+  const alreadyUpvoted = request.upvotedBy.some(
+    (userId) => userId.toString() === req.user._id.toString()
+  );
+
+
+  const alreadyDownvoted = request.downvotedBy.some(
+    (userId) => userId.toString() === req.user._id.toString()
+  );
+
+
+  if (alreadyDownvoted) {
+    throw new ApiError(
+      409,
+      "You have already downvoted this skill request."
+    );
+  }
+
+
+  if (alreadyUpvoted) {
+    throw new ApiError(
+      409,
+      "You have already upvoted this skill request. You cannot downvote again."
+    );
+  }
+
+
   request.downvotes += 1;
 
+  request.downvotedBy.push(req.user._id);
+
+
   await request.save();
+
 
   return sendResponse(
     res,
     200,
     "Skill request downvoted successfully.",
-    request,
+    request
   );
 });
-
 // Delete Skill Request checked
 
 export const deleteSkillRequest = CatchAsync(async (req, res) => {
