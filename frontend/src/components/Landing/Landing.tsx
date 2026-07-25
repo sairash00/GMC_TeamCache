@@ -3,118 +3,113 @@ import {
   IoVideocamOutline,
   IoPeopleOutline,
   IoFlashOutline,
+  IoArrowForwardOutline,
+  IoTrophyOutline,
+  IoStatsChartOutline,
+  IoPlayCircleOutline,
 } from "react-icons/io5";
 
 const Landing = () => {
   return (
-    <section className="relative h-[calc(100vh-64px)] bg-background flex items-center justify-center overflow-hidden">
-      {/* Decorative Background */}
-      <div className="absolute -top-44 left-1/2 -translate-x-1/2 w-[650px] h-[650px] bg-selection opacity-30 blur-[140px] rounded-full"></div>
+    <>
+      {/* Hero - Single Viewport, No Scroll */}
+      <section className="relative h-screen bg-background flex items-center overflow-hidden">
+        <div className="relative z-10 max-w-4xl mx-auto w-full h-full px-6 lg:px-10">
+          <div className="flex h-full items-center justify-center">
 
-      <div className="absolute bottom-[-180px] left-[-150px] w-[350px] h-[350px] bg-accent opacity-15 blur-[120px] rounded-full"></div>
+            {/* Centered Text Content */}
+            <div className="text-center animate-in" style={{ animationDelay: "0.05s" }}>
+              <p className="text-secondary font-semibold text-sm tracking-[0.25em] uppercase">
+                Learn · Earn · Request
+              </p>
 
-      <div className="absolute top-[20%] right-[-120px] w-[280px] h-[280px] bg-primary opacity-10 blur-[120px] rounded-full"></div>
+              <h1 className="mt-4 text-[2.5rem] md:text-[3.5rem] lg:text-[4.5rem] font-extrabold leading-[1.05] tracking-tight">
+                <span className="text-primary">Share Skills.</span>
+                <br />
+                <span className="text-secondary">Learn Together.</span>
+              </h1>
 
-      <div className="relative z-10 max-w-6xl mx-auto w-full px-6 lg:px-10">
+              <p className="mt-6 text-text-secondary text-base md:text-lg leading-relaxed max-w-2xl mx-auto">
+                Upload short educational videos, earn credits by helping others,
+                and discover practical skills shared by the community.
+              </p>
 
-        {/* Hero */}
-        <div className="text-center max-w-3xl mx-auto">
+              {/* Primary CTA */}
+              <div className="mt-10 flex flex-col sm:flex-row items-center gap-3 justify-center">
+                <Link
+                  to="/videos"
+                  className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-secondary text-white font-semibold text-base hover:bg-primary transition-all duration-300 group w-full sm:w-auto"
+                >
+                  Get Started
+                  <IoArrowForwardOutline
+                    size={18}
+                    className="group-hover:translate-x-1 transition-transform"
+                  />
+                </Link>
+                <Link
+                  to="/skill-requests"
+                  className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl border-2 border-border text-text-primary font-semibold text-base hover:border-secondary hover:text-secondary hover:bg-secondary/5 transition-all duration-300 w-full sm:w-auto"
+                >
+                  Browse Requests
+                </Link>
+              </div>
 
-          <p className="text-secondary text-sm font-semibold tracking-[0.3em] uppercase mb-2">
-            Learn • Earn • Request
-          </p>
+              {/* How it works - compact inline */}
+              <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-5 pt-2">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-lg bg-surface/80 backdrop-blur-xl border border-border/30 flex items-center justify-center">
+                    <IoVideocamOutline size={15} className="text-secondary" />
+                  </div>
+                  <span className="text-sm font-medium text-text-primary">Upload</span>
+                </div>
+                <div className="hidden sm:block w-1 h-1 rounded-full bg-border"></div>
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-lg bg-surface/80 backdrop-blur-xl border border-border/30 flex items-center justify-center">
+                    <IoFlashOutline size={15} className="text-credits" />
+                  </div>
+                  <span className="text-sm font-medium text-text-primary">Earn credits</span>
+                </div>
+                <div className="hidden sm:block w-1 h-1 rounded-full bg-border"></div>
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-lg bg-surface/80 backdrop-blur-xl border border-border/30 flex items-center justify-center">
+                    <IoPeopleOutline size={15} className="text-primary" />
+                  </div>
+                  <span className="text-sm font-medium text-text-primary">Request skills</span>
+                </div>
+              </div>
 
-          <h1 className="text-4xl md:text-5xl lg:text-[3.4rem] font-extrabold text-text-primary leading-tight">
-            Share Skills.
-            <br />
-            Learn Together.
-          </h1>
+              {/* Compact trust indicators */}
+              <div className="mt-10 flex flex-wrap items-center justify-center gap-6 pt-2 text-xs">
+                <div className="flex items-center gap-1.5">
+                  <IoTrophyOutline size={14} className="text-primary" />
+                  <span className="font-bold text-primary">500+ skills</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <IoPeopleOutline size={14} className="text-secondary" />
+                  <span className="font-bold text-primary">12K+ learners</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <IoStatsChartOutline size={14} className="text-credits" />
+                  <span className="font-bold text-primary">100K+ credits</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <IoPlayCircleOutline size={14} className="text-accent" />
+                  <span className="font-bold text-primary">50K+ hours</span>
+                </div>
+              </div>
+            </div>
 
-          <p className="mt-4 text-base text-text-secondary max-w-xl mx-auto leading-7">
-            Upload short educational videos, earn credits by helping others,
-            and discover practical skills shared by the community.
-          </p>
-
-          <Link
-            to="/videos"
-            className="inline-flex items-center mt-7 px-8 py-3 rounded-xl border-2 border-primary text-primary text-sm font-semibold hover:bg-primary hover:text-white hover:shadow-hover hover:-translate-y-1 transition-all duration-300"
-          >
-            Get Started
-          </Link>
+          </div>
         </div>
 
-        {/* Features */}
-
-        <div className="flex flex-wrap justify-center gap-5 mt-12">
-
-          {/* Upload */}
-
-          <div className="w-56 bg-card rounded-2xl p-4 shadow hover:shadow-hover hover:-translate-y-2 transition-all duration-300">
-
-            <div className="w-11 h-11 rounded-full bg-selection flex items-center justify-center mx-auto">
-              <IoVideocamOutline
-                size={22}
-                className="text-primary"
-              />
-            </div>
-
-            <h3 className="mt-3 text-base font-semibold text-text-primary text-center">
-              Upload Skills
-            </h3>
-
-            <p className="mt-2 text-xs text-text-secondary text-center leading-5">
-              Share bite-sized educational videos and help others learn faster.
-            </p>
-
-          </div>
-
-          {/* Credits */}
-
-          <div className="w-56 bg-card rounded-2xl p-4 shadow hover:shadow-hover hover:-translate-y-2 transition-all duration-300">
-
-            <div className="w-11 h-11 rounded-full bg-selection flex items-center justify-center mx-auto">
-              <IoFlashOutline
-                size={22}
-                className="text-primary"
-              />
-            </div>
-
-            <h3 className="mt-3 text-base font-semibold text-text-primary text-center">
-              Earn Credits
-            </h3>
-
-            <p className="mt-2 text-xs text-text-secondary text-center leading-5">
-              Receive credits for your contributions and unlock premium learning
-              content.
-            </p>
-
-          </div>
-
-          {/* Requests */}
-
-          <div className="w-56 bg-card rounded-2xl p-4 shadow hover:shadow-hover hover:-translate-y-2 transition-all duration-300">
-
-            <div className="w-11 h-11 rounded-full bg-selection flex items-center justify-center mx-auto">
-              <IoPeopleOutline
-                size={22}
-                className="text-primary"
-              />
-            </div>
-
-            <h3 className="mt-3 text-base font-semibold text-text-primary text-center">
-              Request Skills
-            </h3>
-
-            <p className="mt-2 text-xs text-text-secondary text-center leading-5">
-              Request new topics and let the community create them for everyone.
-            </p>
-
-          </div>
-
+        {/* Subtle atmospheric background blobs */}
+        <div className="absolute inset-0 -z-20 overflow-hidden pointer-events-none">
+          <div className="absolute top-1/4 left-10 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
+          <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-secondary/10 rounded-full blur-3xl" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-accent/5 rounded-full blur-3xl" />
         </div>
-
-      </div>
-    </section>
+      </section>
+    </>
   );
 };
 

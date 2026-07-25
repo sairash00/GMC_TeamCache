@@ -102,7 +102,6 @@ const Register: React.FC = () => {
         response.data.message || "Registration Successful"
       );
 
-      // Save logged-in user
       if (response.data.user) {
         localStorage.setItem(
           "userInfo",
@@ -131,27 +130,27 @@ const Register: React.FC = () => {
   };
 
   return (
-    <div className="w-screen h-screen bg-[#081C3A]">
-      <div className="w-full h-full flex justify-center items-center px-4">
-        <div className="w-[30vw] max-xl:w-[38vw] max-lg:w-[48vw] max-md:w-[60vw] max-sm:w-[80vw] max-xs:w-full bg-[#10284D] rounded-xl shadow-2xl px-8 py-8">
-          <div className="text-center">
-            <h1 className="text-4xl font-bold text-[#F8F2E7]">
+    <div className="w-screen h-screen bg-background flex items-center justify-center px-4">
+      <div className="w-full max-w-md">
+        <div className="bg-surface/80 backdrop-blur-2xl border border-border/30 rounded-2xl p-8">
+          <div className="text-center mb-8">
+            <h1 className="text-4xl font-bold text-text-primary">
               SkillSnap
             </h1>
 
-            <p className="mt-2 text-[#E8D8B5]/70">
+            <p className="text-text-secondary mt-2">
               Create your account
             </p>
           </div>
 
           <form
             onSubmit={handleSubmit}
-            className="flex flex-col gap-6 mt-10"
+            className="flex flex-col gap-6"
           >
             <div>
               <label
                 htmlFor="name"
-                className="text-sm font-semibold tracking-wide text-[#F8F2E7]"
+                className="text-sm font-semibold tracking-wide text-text-primary block mb-2"
               >
                 Full Name
               </label>
@@ -165,14 +164,14 @@ const Register: React.FC = () => {
                 onChange={handleChange}
                 disabled={loading}
                 placeholder="John Doe"
-                className="mt-2 w-full bg-transparent border-b border-[#E8D8B5]/40 py-3 text-[#F8F2E7] placeholder:text-[#F8F2E7]/40 outline-none focus:border-[#F8F2E7] disabled:opacity-50"
+                className="w-full bg-background/50 backdrop-blur-sm border border-border/30 rounded-xl py-3 px-4 text-text-primary placeholder:text-text-secondary/40 outline-none focus:border-primary focus:bg-background transition-all disabled:opacity-50"
               />
             </div>
 
             <div>
               <label
                 htmlFor="email"
-                className="text-sm font-semibold tracking-wide text-[#F8F2E7]"
+                className="text-sm font-semibold tracking-wide text-text-primary block mb-2"
               >
                 Email
               </label>
@@ -186,59 +185,49 @@ const Register: React.FC = () => {
                 onChange={handleChange}
                 disabled={loading}
                 placeholder="john@example.com"
-                className="mt-2 w-full bg-transparent border-b border-[#E8D8B5]/40 py-3 text-[#F8F2E7] placeholder:text-[#F8F2E7]/40 outline-none focus:border-[#F8F2E7] disabled:opacity-50"
+                className="w-full bg-background/50 backdrop-blur-sm border border-border/30 rounded-xl py-3 px-4 text-text-primary placeholder:text-text-secondary/40 outline-none focus:border-primary focus:bg-background transition-all disabled:opacity-50"
               />
             </div>
 
             <div>
               <label
                 htmlFor="password"
-                className="text-sm font-semibold tracking-wide text-[#F8F2E7]"
+                className="text-sm font-semibold tracking-wide text-text-primary block mb-2"
               >
                 Password
               </label>
 
-              <input
-                id="password"
-                name="password"
-                type={showPassword ? "text" : "password"}
-                autoComplete="new-password"
-                value={data.password}
-                onChange={handleChange}
-                disabled={loading}
-                placeholder="••••••••"
-                className="mt-2 w-full bg-transparent border-b border-[#E8D8B5]/40 py-3 text-[#F8F2E7] placeholder:text-[#F8F2E7]/40 outline-none focus:border-[#F8F2E7] disabled:opacity-50"
-              />
-
-              <div className="mt-4 flex items-center gap-2">
+              <div className="relative">
                 <input
-                  id="showPassword"
-                  type="checkbox"
-                  checked={showPassword}
-                  onChange={() =>
-                    setShowPassword((prev) => !prev)
-                  }
+                  id="password"
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  autoComplete="new-password"
+                  value={data.password}
+                  onChange={handleChange}
                   disabled={loading}
-                  className="accent-[#E8D8B5]"
+                  placeholder="••••••••"
+                  className="w-full bg-background/50 backdrop-blur-sm border border-border/30 rounded-xl py-3 px-4 pr-12 text-text-primary placeholder:text-text-secondary/40 outline-none focus:border-primary focus:bg-background transition-all disabled:opacity-50"
                 />
-
-                <label
-                  htmlFor="showPassword"
-                  className="text-sm text-[#F8F2E7] cursor-pointer"
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  disabled={loading}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-text-secondary hover:text-text-primary transition-colors"
                 >
-                  Show Password
-                </label>
+                  {showPassword ? "🙈" : "👁️"}
+                </button>
               </div>
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="h-[55px] rounded-lg bg-[#E8D8B5] text-[#081C3A] font-bold tracking-wide transition hover:bg-[#F7EFD9] disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center"
+              className="mt-2 h-[55px] rounded-xl bg-secondary text-surface font-bold tracking-wide shadow-lg transition-all duration-300 hover:bg-primary hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed flex justify-center items-center"
             >
               {loading ? (
                 <>
-                  <div className="w-5 h-5 border-2 border-[#081C3A] border-t-transparent rounded-full animate-spin mr-2"></div>
+                  <div className="w-5 h-5 border-2 border-surface border-t-transparent rounded-full animate-spin mr-2"></div>
                   Creating Account...
                 </>
               ) : (
@@ -247,11 +236,11 @@ const Register: React.FC = () => {
             </button>
           </form>
 
-          <div className="mt-6 text-center text-sm text-[#F8F2E7]">
+          <div className="text-center mt-6 text-text-primary text-sm">
             Already have an account?{" "}
             <Link
               to="/login"
-              className="font-semibold text-[#E8D8B5] underline underline-offset-4 hover:text-white"
+              className="font-semibold underline underline-offset-4 text-secondary hover:text-primary transition"
             >
               Sign In
             </Link>

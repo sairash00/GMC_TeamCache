@@ -4,7 +4,6 @@ import axios from "axios";
 import toast from "react-hot-toast";
 
 const ProfileVideoCard = ({ video }: { video: any }) => {
-  // console.log(video)
   const handleDelete = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
@@ -12,21 +11,17 @@ const ProfileVideoCard = ({ video }: { video: any }) => {
     e.stopPropagation();
     
     try {
-      // Later replace with your endpoint
-      // await axios.delete(
-      //   `${import.meta.env.VITE_DELETE_VIDEO}/${video._id}`,
-      //   {
-      //     withCredentials: true,
-      //   }
-      // );
-
-      // console.log("Deleting:", video._id);
+      await axios.delete(
+        `http://localhost:3000/api/video/${video._id}`,
+        {
+          withCredentials: true,
+        }
+      );
 
       toast.success("Video deleted.");
 
-      // Later you can either:
-      // window.location.reload();
-      // OR call a parent refresh function.
+      window.location.reload();
+
     } catch (error) {
       if (axios.isAxiosError(error)) {
         toast.error(error.response?.data?.message || "Couldn't delete video.");
@@ -39,16 +34,16 @@ const ProfileVideoCard = ({ video }: { video: any }) => {
   return (
     <Link
       to={`/video/${video._id}`}
-      className="relative bg-accent bg-slate-800 hover:bg-accent-hover rounded-2xl p-3 transition-all duration-300 hover:-translate-y-1"
+      className="relative group bg-surface/80 backdrop-blur-2xl border border-border/30 rounded-2xl p-3 transition-all duration-300 hover:border-secondary/40 hover:bg-surface/90 hover:-translate-y-1"
     >
       {/* Delete Icon */}
       <button
         onClick={handleDelete}
-        className="absolute top-5 right-5 z-10"
+        className="absolute top-5 right-5 z-10 opacity-0 group-hover:opacity-100 transition-opacity"
       >
         <IoTrashOutline
           size={22}
-          className="text-white hover:text-red-400 transition"
+          className="text-text-secondary hover:text-red-400 transition"
         />
       </button>
 
@@ -56,7 +51,7 @@ const ProfileVideoCard = ({ video }: { video: any }) => {
       <img
         src={video.thumbnail.url}
         alt={video.title}
-        className="w-full aspect-video rounded-xl object-cover"
+        className="w-full aspect-video rounded-xl object-cover transition-transform duration-300 group-hover:scale-[1.03]"
       />
 
       {/* Info */}
@@ -66,7 +61,7 @@ const ProfileVideoCard = ({ video }: { video: any }) => {
           {video.title}
         </h2>
 
-        <p className="text-text-secondary text-xs mt-1">
+        <p className="mt-1 text-xs text-text-secondary">
           {video.creator}
         </p>
 

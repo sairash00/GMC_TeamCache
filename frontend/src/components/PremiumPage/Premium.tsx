@@ -50,7 +50,7 @@ const PremiumVideos = () => {
     <section className="h-[calc(100vh-64px)] bg-background overflow-hidden">
       <div className="h-full px-6 py-6">
         {/* Header */}
-        <div className="mb-6">
+        <div className="bg-surface/80 backdrop-blur-2xl border border-border/30 rounded-2xl px-6 py-4 mb-6">
           <h1 className="text-3xl font-bold text-text-primary">
             Premium Videos
           </h1>
@@ -61,7 +61,7 @@ const PremiumVideos = () => {
         </div>
 
         {/* Videos */}
-        <div className="h-[calc(100%-72px)] overflow-y-auto pr-2">
+        <div className="h-[calc(100%-140px)] overflow-y-auto pr-2">
           {premiumVideos.length === 0 ? (
             <div className="flex h-full items-center justify-center">
               <p className="text-lg text-text-secondary">

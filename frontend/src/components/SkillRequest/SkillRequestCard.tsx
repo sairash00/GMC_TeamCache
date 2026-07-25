@@ -69,30 +69,30 @@ const SkillRequestCard = ({ request }: any) => {
   };
 
   const handleDelete = async () => {
-  try {
-    const response = await axios.delete(
-      `http://localhost:3000/api/skill-request/${request._id}`,
-      {
-        withCredentials: true,
-      }
-    );
+    try {
+      const response = await axios.delete(
+        `http://localhost:3000/api/skill-request/${request._id}`,
+        {
+          withCredentials: true,
+        }
+      );
 
-    toast.success(
-      response.data.message || "Skill request deleted successfully."
-    );
+      toast.success(
+        response.data.message || "Skill request deleted successfully."
+      );
 
-    window.location.reload();
-  } catch (error: any) {
-    toast.error(
-      error.response?.data?.message ||
-        "Failed to delete skill request."
-    );
-  }
-};
+      window.location.reload();
+    } catch (error: any) {
+      toast.error(
+        error.response?.data?.message ||
+          "Failed to delete skill request."
+      );
+    }
+  };
 
 
   return (
-    <div className="relative flex gap-4 rounded-xl bg-slate-800 hover:bg-slate-600 transition-all duration-300 p-4">
+    <div className="relative flex gap-4 rounded-2xl bg-surface/80 backdrop-blur-2xl border border-border/30 p-5 transition-all duration-300 hover:border-secondary/40 hover:bg-surface/90">
       {isOwner && (
         <button
           onClick={handleDelete}
@@ -103,56 +103,56 @@ const SkillRequestCard = ({ request }: any) => {
       )}
 
       {/* Votes */}
-
-      <div className="flex flex-col items-center justify-center gap-2 min-w-12 rounded-lg bg-accent px-2 py-3">
+<div className="flex flex-col items-center justify-center gap-2 min-w-12 rounded-xl bg-surface/80 backdrop-blur-xl border border-border/30 px-2 py-3">
         <button
           onClick={handleUpvote}
           disabled={voted || loading}
-          className={`text-white hover:text-green-300 transition ${
-            voted || loading ? "opacity-50 cursor-not-allowed" : ""
-          }`}
+          className={`text-lg hover:text-green-300 transition ${voted || loading ? "opacity-50 cursor-not-allowed" : ""}`}
         >
-          <FaArrowUp size={14} />
+          <FaArrowUp size={18} />
         </button>
 
-        <span className="text-white font-bold text-sm">{votes}</span>
+        <span className="text-lg font-semibold text-text-primary">
+          {votes}
+        </span>
 
         <button
           onClick={handleDownvote}
           disabled={voted || loading}
-          className={`text-white hover:text-red-300 transition ${
-            voted || loading ? "opacity-50 cursor-not-allowed" : ""
-          }`}
+          className={`text-lg hover:text-red-300 transition ${voted || loading ? "opacity-50 cursor-not-allowed" : ""}`}
         >
-          <FaArrowDown size={14} />
+          <FaArrowDown size={18} />
         </button>
       </div>
 
-      {/* Content */}
+      <div className="flex-1 min-w-0">
+        <h3 className="text-text-primary font-semibold text-xl line-clamp-2">
+          {request.title}
+        </h3>
 
-      <div className="flex-1">
-        <div className="flex items-center gap-2 mb-2">
-          <img
-            src={
-              request.requestedBy.avatar.url ||
-              "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
-            }
-            alt={request.user}
-            className="w-9 h-9 rounded-full object-cover"
-          />
-
-          <span className="text-sm text-gray-300">
+        <p className="mt-1 text-base text-text-secondary">
+          Requested by{" "}
+          <span className="font-medium text-text-primary">
             {request.requestedBy.name}
           </span>
-        </div>
+        </p>
 
-        <h2 className="text-white font-semibold text-lg">
-          {request.title}
-        </h2>
-
-        <p className="text-gray-300 text-sm mt-1 line-clamp-3">
+        <p className="mt-2 text-sm text-text-secondary line-clamp-2">
           {request.description}
         </p>
+
+        {request.tags && request.tags.length > 0 && (
+          <div className="mt-3 flex flex-wrap gap-1.5">
+            {request.tags.map((tag: string) => (
+              <span
+                key={tag}
+                className="px-2 py-0.5 text-sm font-medium text-secondary bg-secondary/10 rounded-full"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

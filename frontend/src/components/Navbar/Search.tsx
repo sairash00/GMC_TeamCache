@@ -30,7 +30,6 @@ const Search = () => {
       video.title.toLowerCase().includes(search.toLowerCase())
     );
 
-    // If nothing matches, show all videos
     return filtered.length > 0 ? filtered : videos;
   }, [search, videos]);
 
@@ -51,10 +50,9 @@ const Search = () => {
         </h1>
 
         {/* Search */}
-
-        <div className="relative">
+        <div className="relative mb-10">
           <IoSearchOutline
-            className="absolute left-5 top-1/2 -translate-y-1/2 text-black"
+            className="absolute left-5 top-1/2 -translate-y-1/2 text-text-secondary"
             size={22}
           />
 
@@ -63,13 +61,12 @@ const Search = () => {
             placeholder="Search skills..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full bg-card rounded-2xl pl-14 pr-5 py-4 font-semibold outline-none text-black shadow border border-border focus:border-primary transition"
+            className="w-full bg-surface/80 backdrop-blur-2xl border border-border/30 rounded-2xl pl-14 pr-5 py-4 font-semibold outline-none text-text-primary placeholder:text-text-secondary focus:border-primary transition-all shadow-sm"
           />
         </div>
 
         {/* Results */}
-
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredVideos.map((video: any) => (
             <VideoCard
               key={video._id}

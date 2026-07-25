@@ -4,23 +4,54 @@
 
 
 *{
-  font-family: 'quicksand', 'arial';
+  font-family: 'Manrope', 'system-ui', 'sans-serif';
 }
 
-html, body{
-    background: #12162A;
-    color: whitesmoke;
-    overflow-x: hidden;
-    overflow-y: auto;
+html {
+  font-size: 17px;
 }
 
-body *::-webkit-scrollbar{
-    width:4px;
-    background: transparent;
+html, body {
+  background: #EAE0CF;
+  color: #111844;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
-body *::-webkit-scrollbar-thumb{
-    background-color: #FC4E03;
-    border-radius: 50px;
+body *::-webkit-scrollbar {
+  width: 4px;
+  background: transparent;
+}
+
+body *::-webkit-scrollbar-thumb {
+  background-color: #4B5694;
+  border-radius: 50px;
+}
+
+/* Custom animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Minimal entrance animation for landing sections */
+.animate-in {
+  animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-in {
+    animation: none;
+  }
 }
 
